@@ -1,10 +1,23 @@
 import type { Metadata } from 'next';
+import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import { Providers } from './providers'; // 👈 ADD THIS IMPORT
+import { Providers } from './providers';
+import '@rainbow-me/rainbowkit/styles.css';
+
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+});
+
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+});
 
 export const metadata: Metadata = {
-  title: 'PAY.3WORDPIN — Simple Payments Mapped to a 3 Word Pin address.',
-  description: 'PAY.3WORDPIN makes payments simple.',
+  title: 'Spray - Multi-Chain Batch Payments',
+  description: 'Send crypto to multiple addresses across multiple chains in a single transaction',
+  keywords: ['DeFi', 'batch payments', 'Base', 'Optimism', 'Arbitrum', 'crypto'],
 };
 
 export default function RootLayout({
@@ -14,8 +27,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>{children}</Providers> {/* 👈 WRAP CHILDREN HERE */}
+      <body className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
