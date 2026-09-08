@@ -1,174 +1,1005 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spraay - Batch Crypto Payments on Base</title>
-    <meta name="description" content="Send crypto to 200+ recipients in a single transaction. Batch ETH and ERC-20 payments via natural language through Bankr on Base.">
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PAY.3WORDPIN — Pay With 3 Words</title>
+
+  <meta
+    name="description"
+    content="PAY.3WORDPIN makes payments simple. Share a 3 Word Pin instead of complicated payment addresses."
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #050505;
+      --white: #ffffff;
+      --soft: #f7f7f5;
+      --muted: #737373;
+      --border: #e8e8e8;
+      --accent: #00c896;
+      --accent-dark: #00a97f;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* NAV */
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-content {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .logo span {
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a:not(.nav-button) {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .nav-button {
+      background: var(--black);
+      color: white;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* HERO */
+
+    .hero {
+      padding: 110px 0 100px;
+      text-align: center;
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(0,200,150,.10),
+          transparent 38%
+        );
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1fdf9;
+      border: 1px solid #d8f5eb;
+      color: #008f70;
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      margin: 0 auto;
+      font-size: clamp(52px, 8vw, 92px);
+      line-height: .95;
+      letter-spacing: -.07em;
+      font-weight: 800;
+    }
+
+    .hero h1 .green {
+      color: var(--accent);
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      margin: 30px auto 0;
+      font-size: 20px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 38px;
+      flex-wrap: wrap;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black);
+      color: white;
+      padding: 15px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform .2s ease;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      color: var(--black);
+      border: 1px solid var(--border);
+      padding: 15px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    /* 3 WORD DEMO */
+
+    .pin-demo {
+      margin: 70px auto 0;
+      max-width: 650px;
+      background: var(--black);
+      border-radius: 28px;
+      padding: 38px;
+      color: white;
+      box-shadow: 0 25px 70px rgba(0,0,0,.12);
+    }
+
+    .pin-label {
+      color: #999;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: .15em;
+      margin-bottom: 14px;
+    }
+
+    .pin {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -.05em;
+    }
+
+    .pin-description {
+      margin-top: 12px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    /* PROBLEM */
+
+    .problem {
+      padding: 110px 0;
+      background: var(--soft);
+      text-align: center;
+    }
+
+    .problem h2,
+    .benefits h2,
+    .how h2,
+    .plasma h2,
+    .cta h2 {
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1;
+      letter-spacing: -.055em;
+      font-weight: 800;
+    }
+
+    .section-subtitle {
+      max-width: 620px;
+      margin: 20px auto 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      max-width: 850px;
+      margin: 55px auto 0;
+    }
+
+    .comparison-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px;
+      text-align: left;
+    }
+
+    .comparison-card h3 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .bad {
+      color: #888;
+    }
+
+    .good {
+      border: 2px solid var(--accent);
+    }
+
+    .good h3 {
+      color: var(--accent-dark);
+    }
+
+    .address {
+      padding: 16px;
+      background: #f6f6f6;
+      border-radius: 14px;
+      font-family: monospace;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .three-word {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    /* BENEFITS */
+
+    .benefits {
+      padding: 110px 0;
+    }
+
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 55px;
+    }
+
+    .benefit-card {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: white;
+    }
+
+    .benefit-icon {
+      font-size: 28px;
+      margin-bottom: 22px;
+    }
+
+    .benefit-card h3 {
+      font-size: 20px;
+      letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+
+    .benefit-card p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* HOW IT WORKS */
+
+    .how {
+      padding: 110px 0;
+      background: var(--soft);
+    }
+
+    .steps {
+      max-width: 760px;
+      margin: 55px auto 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .step-number {
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--black);
+      color: white;
+      font-weight: 700;
+    }
+
+    .step h3 {
+      font-size: 19px;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      color: var(--muted);
+    }
+
+    /* PLASMA */
+
+    .plasma {
+      padding: 110px 0;
+    }
+
+    .plasma-card {
+      background: var(--black);
+      color: white;
+      border-radius: 32px;
+      padding: 65px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .plasma-card h2 {
+      color: white;
+    }
+
+    .plasma-card p {
+      color: #aaa;
+      font-size: 17px;
+      margin-top: 20px;
+      max-width: 550px;
+    }
+
+    .plasma-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .plasma-button {
+      background: white;
+      color: black;
+      padding: 16px 22px;
+      border-radius: 999px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .plasma-button.outline {
+      background: transparent;
+      color: white;
+      border: 1px solid #444;
+    }
+
+    /* CTA */
+
+    .cta {
+      padding: 120px 0;
+      text-align: center;
+      background: var(--soft);
+    }
+
+    .cta p {
+      max-width: 550px;
+      margin: 20px auto 30px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: var(--black);
+      color: white;
+      padding: 55px 0;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .footer-left p {
+      margin-top: 8px;
+      color: #888;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid #222;
+      margin-top: 40px;
+      padding-top: 25px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+
+      .nav-links a:not(.nav-button) {
+        display: none;
+      }
+
+      .hero {
+        padding: 80px 0;
+      }
+
+      .hero-subtitle {
+        font-size: 17px;
+      }
+
+      .comparison,
+      .benefit-grid,
+      .plasma-card {
+        grid-template-columns: 1fr;
+      }
+
+      .plasma-card {
+        padding: 35px 25px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+      }
+
+      .pin-demo {
+        padding: 28px 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">SPRAAY</div>
-                <div class="nav-links">
-                    <a href="https://bankr.bot" target="_blank" class="cta-button">Use via Bankr</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Batch Crypto Payments<br/>Made Simple</h1>
-                <p class="hero-subtitle">Send ETH or ERC-20 tokens to 200+ recipients in a single transaction on Base. Now integrated with Bankr's AI agent.</p>
-                <div class="hero-stats">
-                    <div class="stat">
-                        <div class="stat-value">~80%</div>
-                        <div class="stat-label">Gas Savings</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">200+</div>
-                        <div class="stat-label">Recipients per Tx</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">0.3%</div>
-                        <div class="stat-label">Protocol Fee</div>
-                    </div>
-                </div>
-                <a href="https://bankr.bot" target="_blank" class="primary-button">Start Batch Sending →</a>
-            </div>
-        </div>
-    </section>
+  <!-- NAV -->
 
-    <section class="features">
-        <div class="container">
-            <h2>Powered by Natural Language</h2>
-            <p class="section-subtitle">Use Spraay through Bankr's AI agent on Telegram, Discord, or Farcaster</p>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Natural Language</h3>
-                    <p>Just tell Bankr what you want to send and to whom. No complex interfaces.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Flexible Amounts</h3>
-                    <p>Send equal amounts to everyone or specify variable amounts per recipient.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📁</div>
-                    <h3>CSV Import</h3>
-                    <p>Upload large recipient lists for airdrops, payroll, or distributions.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Social Handles</h3>
-                    <p>Send to Farcaster handles or ENS names - no need for raw addresses.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Swap + Spray</h3>
-                    <p>Combine with Bankr's trading skill to swap and distribute in one flow.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Gas Efficient</h3>
-                    <p>Save ~80% on gas fees compared to sending individual transactions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-content">
 
-    <section class="how-it-works">
-        <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Connect to Bankr</h3>
-                        <p>Use Bankr's AI agent on Telegram, Discord, or Farcaster</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Describe Your Payment</h3>
-                        <p>Tell Bankr who you want to pay and how much in natural language</p>
-                    </div>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Spraay Executes</h3>
-                        <p>Single transaction sends to all recipients on Base with 0.3% protocol fee</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="contract-info">
-                <p><strong>Base Contract:</strong> <code>0x1646452F98E36A3c9Cfc3eDD8868221E207B5eEC</code></p>
-            </div>
-        </div>
-    </section>
+        <a href="/" class="logo">
+          PAY.<span>3WORDPIN</span>
+        </a>
 
-    <section class="use-cases">
-        <div class="container">
-            <h2>Perfect For</h2>
-            <div class="use-case-grid">
-                <div class="use-case">
-                    <h3>🎁 Airdrops</h3>
-                    <p>Distribute tokens to community members efficiently</p>
-                </div>
-                <div class="use-case">
-                    <h3>💰 Payroll</h3>
-                    <p>Pay team members or contributors in crypto</p>
-                </div>
-                <div class="use-case">
-                    <h3>🎯 Rewards</h3>
-                    <p>Send rewards to participants or winners</p>
-                </div>
-                <div class="use-case">
-                    <h3>🤝 Distributions</h3>
-                    <p>Execute treasury distributions or profit sharing</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="nav-links">
+          <a href="#how">How It Works</a>
+          <a href="#benefits">Benefits</a>
 
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to Batch Send?</h2>
-            <p>Access Spraay through Bankr's AI agent platform with 69K+ users</p>
-            <a href="https://bankr.bot" target="_blank" class="primary-button large">Use Spraay via Bankr →</a>
+          <a
+            href="https://plasma.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-button"
+          >
+            Open Plasma
+          </a>
         </div>
-    </section>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-left">
-                    <div class="logo">SPRAAY</div>
-                    <p>Batch crypto payments on Base</p>
-                </div>
-                <div class="footer-right">
-                    <a href="https://twitter.com/lostpoet" target="_blank">Twitter</a>
-                    <a href="https://warpcast.com/plag" target="_blank">Farcaster</a>
-                    <a href="https://basescan.org/address/0x1646452F98E36A3c9Cfc3eDD8868221E207B5eEC" target="_blank">Contract</a>
-                </div>
-            </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="container">
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Simple payments. Powered by Plasma.
+      </div>
+
+      <h1>
+        PAY WITH
+        <span class="green">3 WORDS.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Forget long payment addresses and complicated instructions.
+        Your 3 Word Pin gives people a simple way to find you,
+        pay you, and share your payment destination.
+      </p>
+
+      <div class="hero-actions">
+
+        <a href="/create" class="primary-button">
+          Create Your 3 Word Pin →
+        </a>
+
+        <a
+          href="https://plasma.to"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="secondary-button"
+        >
+          Open Plasma
+        </a>
+
+      </div>
+
+
+      <!-- PIN DEMO -->
+
+      <div class="pin-demo">
+
+        <div class="pin-label">
+          Your payment address
         </div>
-    </footer>
+
+        <div class="pin">
+          ///KEEP.IT.SIMPLE
+        </div>
+
+        <div class="pin-description">
+          One simple address people can remember and share.
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PROBLEM -->
+
+  <section class="problem">
+
+    <div class="container">
+
+      <h2>
+        Payments shouldn't<br />
+        be this complicated.
+      </h2>
+
+      <p class="section-subtitle">
+        Stop sending people long strings of numbers,
+        copying addresses, or explaining where to send money.
+      </p>
+
+
+      <div class="comparison">
+
+        <div class="comparison-card bad">
+
+          <h3>Traditional</h3>
+
+          <div class="address">
+            0x1646452F98E36A3c9Cfc3eDD8868221E207B5eEC
+          </div>
+
+          <p style="margin-top:15px;">
+            Hard to remember. Easy to copy incorrectly.
+          </p>
+
+        </div>
+
+
+        <div class="comparison-card good">
+
+          <h3>PAY.3WORDPIN</h3>
+
+          <div class="three-word">
+            ///KEEP.IT.SIMPLE
+          </div>
+
+          <p style="margin-top:15px;">
+            Simple enough to say, remember, and share.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- BENEFITS -->
+
+  <section class="benefits" id="benefits">
+
+    <div class="container">
+
+      <h2>
+        One simple way<br />
+        to move money.
+      </h2>
+
+      <p class="section-subtitle">
+        PAY.3WORDPIN turns complicated payment destinations
+        into something humans can actually remember.
+      </p>
+
+
+      <div class="benefit-grid">
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">💸</div>
+
+          <h3>Get Paid</h3>
+
+          <p>
+            Share your 3 Word Pin when someone needs
+            to send you money.
+          </p>
+
+        </div>
+
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">📤</div>
+
+          <h3>Send Money</h3>
+
+          <p>
+            Use a simple payment identity instead of
+            asking someone for a long address.
+          </p>
+
+        </div>
+
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">📍</div>
+
+          <h3>Find Anyone</h3>
+
+          <p>
+            Your 3 words can become a memorable
+            destination for people to find you.
+          </p>
+
+        </div>
+
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">⚡</div>
+
+          <h3>Fast Payments</h3>
+
+          <p>
+            Built on modern payment infrastructure
+            designed for everyday transactions.
+          </p>
+
+        </div>
+
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">🔐</div>
+
+          <h3>Simple & Secure</h3>
+
+          <p>
+            Keep the complexity behind the scenes
+            while users interact with a simple identity.
+          </p>
+
+        </div>
+
+
+        <div class="benefit-card">
+
+          <div class="benefit-icon">💳</div>
+
+          <h3>Use Your Card</h3>
+
+          <p>
+            Pair your payment identity with the
+            Plasma XPL Card for everyday spending.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HOW IT WORKS -->
+
+  <section class="how" id="how">
+
+    <div class="container">
+
+      <h2 style="text-align:center;">
+        How it works.
+      </h2>
+
+      <p class="section-subtitle" style="text-align:center;">
+        Three steps. That's it.
+      </p>
+
+
+      <div class="steps">
+
+        <div class="step">
+
+          <div class="step-number">1</div>
+
+          <div>
+
+            <h3>Create your 3 Word Pin</h3>
+
+            <p>
+              Choose a unique three-word payment identity.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-number">2</div>
+
+          <div>
+
+            <h3>Share it</h3>
+
+            <p>
+              Text it, post it, put it on your profile,
+              or give it to someone in person.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="step">
+
+          <div class="step-number">3</div>
+
+          <div>
+
+            <h3>Get paid</h3>
+
+            <p>
+              People use your 3 Word Pin to reach
+              your payment destination.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PLASMA -->
+
+  <section class="plasma">
+
+    <div class="container">
+
+      <div class="plasma-card">
+
+        <div>
+
+          <h2>
+            Your simple address.<br />
+            Powerful payment infrastructure.
+          </h2>
+
+          <p>
+            PAY.3WORDPIN keeps the payment experience
+            simple while Plasma handles the underlying
+            payment infrastructure.
+          </p>
+
+          <p>
+            You don't need to understand the technology.
+            Just use your 3 words.
+          </p>
+
+        </div>
+
+
+        <div class="plasma-actions">
+
+          <a
+            href="https://plasma.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="plasma-button"
+          >
+            Open Plasma →
+          </a>
+
+          <a
+            href="https://plasma.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="plasma-button outline"
+          >
+            Learn About Plasma
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CTA -->
+
+  <section class="cta">
+
+    <div class="container">
+
+      <h2>
+        Ready to keep payments simple?
+      </h2>
+
+      <p>
+        Create your 3 Word Pin and give people
+        one simple address they can actually remember.
+      </p>
+
+      <a href="/create" class="primary-button">
+        Create Your 3 Word Pin →
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="container">
+
+      <div class="footer-content">
+
+        <div class="footer-left">
+
+          <div class="logo">
+            PAY.<span>3WORDPIN</span>
+          </div>
+
+          <p>
+            Simple payments. Three words.
+          </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+          <a href="/create">
+            Create Pin
+          </a>
+
+          <a href="/how-it-works">
+            How It Works
+          </a>
+
+          <a
+            href="https://plasma.to"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Plasma App
+          </a>
+
+          <a
+            href="https://plasma.to"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Plasma XPL Card
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <div class="footer-bottom">
+
+        © 2026 PAY.3WORDPIN. Simple payment identity.
+
+      </div>
+
+    </div>
+
+  </footer>
+
 </body>
 </html>
