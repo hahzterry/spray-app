@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './styles.css'; 
+
 :root {
   --font-space-grotesk: 'Space Grotesk', sans-serif;
   --font-jetbrains-mono: 'JetBrains Mono', monospace;
